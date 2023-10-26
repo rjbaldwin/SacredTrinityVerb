@@ -22,11 +22,24 @@ SacredTrinityVerbAudioProcessorEditor::SacredTrinityVerbAudioProcessorEditor(Sac
                     {
                         audioProcessor.savedFile = result;
                         audioProcessor.root = result.getParentDirectory().getFullPathName();
-
+                        audioProcessor.irLoader.reset(); // clears the buffer for next ir file
                         audioProcessor.irLoader.loadImpulseResponse(result, juce::dsp::Convolution::Stereo::yes, juce::dsp::Convolution::Trim::yes, 0);
                     }
                 });
         };
+
+
+    addAndMakeVisible(irMenu);
+    // TO DO - create a funtion fot this lot
+    irMenu.addItem("Main Hall 2m", 1);
+    irMenu.addItem("Main Hall 4m", 2);
+    irMenu.addItem("Main Hall 5m", 3);
+    irMenu.addItem("Main Hall 9m", 4);
+    irMenu.addItem("Small Room 2m", 5);
+    irMenu.addItem("Balcony 3m", 6);
+    irMenu.addItem("Balcony 6m", 7);
+    irMenu.onChange = [this] {  };
+    //irMenu.setSelectedId(1);
 
 
     setSize (800, 600);
@@ -59,4 +72,15 @@ void SacredTrinityVerbAudioProcessorEditor::resized()
 
     loadBtn.setBounds(btnX, btnY, btnWidth, btnHeight);
 
+    // combo box
+    const auto irComboX = getWidth() * JUCE_LIVE_CONSTANT(0.25);
+    const auto irComboY = getHeight() * 0.15; // JUCE_LIVE_CONSTANT(0.5); //0.15
+    const auto irComboWidth = getWidth() * JUCE_LIVE_CONSTANT(0.25);
+    const auto irComboHeight = getHeight() * 0.06; //JUCE_LIVE_CONSTANT(0.5); // 0.06
+
+    irMenu.setBounds(irComboX, irComboY, irComboWidth, irComboHeight);
+
 }
+
+
+
