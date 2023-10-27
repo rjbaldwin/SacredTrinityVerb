@@ -2,6 +2,7 @@
 
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
+#include "BinaryData.h"
 
 //==============================================================================
 
@@ -16,12 +17,14 @@ public:
     void paint(juce::Graphics&) override;
     void resized() override;
 
-    void loadIR(juce::String fileName);
+
+    void loadIRbinary(const char* resourceName, int dataSizeInBytes, size_t resourceSize);
 
 private:
     SacredTrinityVerbAudioProcessor& audioProcessor;
 
     juce::ComboBox irMenu;
+
 
 
     std::unique_ptr<juce::FileChooser> fileChooser;

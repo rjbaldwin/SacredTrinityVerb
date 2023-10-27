@@ -22,29 +22,31 @@ SacredTrinityVerbAudioProcessorEditor::SacredTrinityVerbAudioProcessorEditor(Sac
     irMenu.onChange = [this]
         {  
             int selectedId = irMenu.getSelectedId();
-
+            
+     
             switch (selectedId)
             {
             case 1:
-                loadIR("Main_Hall_2m.wav");
+
+                loadIRbinary("main_hall_2m_wav", BinaryData::main_hall_2m_wavSize, BinaryData::main_hall_2m_wavSize);
                 break;
             case 2:
-                loadIR("Main_Hall_4m.wav");
+                loadIRbinary("main_hall_4m_wav", BinaryData::main_hall_4m_wavSize, BinaryData::main_hall_4m_wavSize);
                 break;
             case 3:
-                loadIR("Main_Hall_5m.wav");
+                loadIRbinary("main_hall_5m_wav", BinaryData::main_hall_5m_wavSize, BinaryData::main_hall_5m_wavSize);
                 break;
             case 4:
-                loadIR("Main_Hall_9m.wav");
+                loadIRbinary("main_hall_9m_wav", BinaryData::main_hall_9m_wavSize, BinaryData::main_hall_9m_wavSize);
                 break;
             case 5:
-                loadIR("Small_Room_2m.wav");
+                loadIRbinary("small_room_2m_wav", BinaryData::small_room_2m_wavSize, BinaryData::small_room_2m_wavSize);
                 break;
             case 6:
-                loadIR("Balcony_3m.wav");
+                loadIRbinary("balcony_3m_wav", BinaryData::balcony_3m_wavSize, BinaryData::balcony_3m_wavSize);
                 break;
             case 7:
-                loadIR("Balcony_6m.wav");
+                loadIRbinary("balcony_6m_wav", BinaryData::balcony_6m_wavSize, BinaryData::balcony_6m_wavSize);
                 break;
             default:
                 break;
@@ -87,24 +89,18 @@ void SacredTrinityVerbAudioProcessorEditor::resized()
 
     irMenu.setBounds(irComboX, irComboY, irComboWidth, irComboHeight);
 
+   
+
 }
 
-// IR loader
-void SacredTrinityVerbAudioProcessorEditor::loadIR(juce::String fileName)
+// IR Binary loader
+
+void SacredTrinityVerbAudioProcessorEditor::loadIRbinary(const char* resourceName, int dataSizeInBytes, size_t resourceSize )
 {
+    const void* sourceData =  BinaryData::getNamedResource(resourceName, dataSizeInBytes);
 
-    auto file = juce::File::getCurrentWorkingDirectory().getChildFile(fileName);
+    audioProcessor.irLoader.reset(); // clears the buffer for next ir file
+    audioProcessor.irLoader.loadImpulseResponse(sourceData, resourceSize, juce::dsp::Convolution::Stereo::yes, juce::dsp::Convolution::Trim::yes, 0, juce::dsp::Convolution::Normalise::yes);
 
-    DBG("Looking for file at: " << file.getFullPathName());
-
-    if (file.existsAsFile()) {
-        DBG("File found: " << file.getFullPathName());
-
-        audioProcessor.irLoader.reset(); // clears the buffer for next ir file
-        audioProcessor.irLoader.loadImpulseResponse(file, juce::dsp::Convolution::Stereo::yes, juce::dsp::Convolution::Trim::yes, 0);
-    }
-    else {
-        DBG("Error: File not found!");
-    }
 }
 
