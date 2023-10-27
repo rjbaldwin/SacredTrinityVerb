@@ -7,6 +7,10 @@
               cppLanguageStandard="20">
   <MAINGROUP id="Lzf2k1" name="SacredTrinityVerb">
     <GROUP id="{F3B34D15-FD97-216A-9DC1-366E488ABFB9}" name="Source">
+      <GROUP id="{35A938CD-1404-7358-2189-61E7AD53C6E6}" name="Component">
+        <FILE id="ljS4WB" name="HorizontalMeter.h" compile="0" resource="0"
+              file="Source/Component/HorizontalMeter.h"/>
+      </GROUP>
       <GROUP id="{EA8E544B-4883-24BF-0A3B-F118317920F9}" name="IRs">
         <FILE id="S5pYit" name="balcony_3m.wav" compile="0" resource="1" file="Source/IRs/balcony_3m.wav"/>
         <FILE id="CohGDY" name="balcony_6m.wav" compile="0" resource="1" file="Source/IRs/balcony_6m.wav"/>

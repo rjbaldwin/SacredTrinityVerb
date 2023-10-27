@@ -24,6 +24,8 @@ SacredTrinityVerbAudioProcessorEditor::SacredTrinityVerbAudioProcessorEditor(Sac
     addAndMakeVisible(gainLabel);
     gainLabel.attachToComponent(&gainSlider, false);
     gainLabel.setText("Gain", juce::dontSendNotification);
+
+    gainSliderAttachment = std::make_unique<SliderAttachment>(audioProcessor.treeState, "GAIN", gainSlider);
     
 
     addAndMakeVisible(irMenu);
@@ -35,6 +37,9 @@ SacredTrinityVerbAudioProcessorEditor::SacredTrinityVerbAudioProcessorEditor(Sac
     irMenu.addItem("Small Room 2m", 5);
     irMenu.addItem("Balcony 3m", 6);
     irMenu.addItem("Balcony 6m", 7);
+
+    //irMenuAttachment = std::make_unique<ComboBoxAttachment>(audioProcessor.treeState, "IRMENU", irMenu);
+
     irMenu.onChange = [this]
         {  
             int selectedId = irMenu.getSelectedId();
@@ -70,6 +75,11 @@ SacredTrinityVerbAudioProcessorEditor::SacredTrinityVerbAudioProcessorEditor(Sac
         };
     
 
+    // level meter
+    addAndMakeVisible(horizontalMeterL);
+    addAndMakeVisible(horizontalMeterR);
+    startTimerHz(24);
+
 
     setSize (600, 600);
 }
@@ -80,6 +90,14 @@ SacredTrinityVerbAudioProcessorEditor::SacredTrinityVerbAudioProcessorEditor(Sac
 
 SacredTrinityVerbAudioProcessorEditor::~SacredTrinityVerbAudioProcessorEditor()
 {
+}
+
+void SacredTrinityVerbAudioProcessorEditor::timerCallback()
+{
+    horizontalMeterL.setLevel(audioProcessor.getRMSValue(0));
+    horizontalMeterR.setLevel(audioProcessor.getRMSValue(1));
+    horizontalMeterL.repaint();
+    horizontalMeterR.repaint();
 }
 
 //==============================================================================
@@ -114,7 +132,9 @@ void SacredTrinityVerbAudioProcessorEditor::resized()
     const auto gsH = getHeight() * JUCE_LIVE_CONSTANT(0.30);
     gainSlider.setBounds(gsX,gsY,gsW,gsH);
 
-   
+    // level meter
+    horizontalMeterL.setBounds(100, 400, 200, 15);
+    horizontalMeterR.setBounds(100, 420, 200, 15);
 
 }
 

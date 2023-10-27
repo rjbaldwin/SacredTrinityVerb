@@ -19,14 +19,22 @@ SacredTrinityVerbAudioProcessor::SacredTrinityVerbAudioProcessor()
                       #endif
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
-                       )
+                       ),
+    treeState{ *this,nullptr,"PARAMETERS", createParameterLayout() }
+
 #endif
 {
+   
 }
 
 SacredTrinityVerbAudioProcessor::~SacredTrinityVerbAudioProcessor()
 {
+   
 }
+
+
+
+
 
 //==============================================================================
 const juce::String SacredTrinityVerbAudioProcessor::getName() const
@@ -139,6 +147,12 @@ void SacredTrinityVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& bu
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
 
+
+    rmsLevelLeft =  juce::Decibels::gainToDecibels(buffer.getRMSLevel(0, 0, buffer.getNumSamples()));
+    rmsLevelRight = juce::Decibels::gainToDecibels(buffer.getRMSLevel(1, 0, buffer.getNumSamples()));
+
+
+
     juce::dsp::AudioBlock<float>block{ buffer };
 
     // for IR loader
@@ -157,6 +171,7 @@ void SacredTrinityVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& bu
         }
     }
 
+    
 }
 
 //==============================================================================
@@ -173,16 +188,51 @@ juce::AudioProcessorEditor* SacredTrinityVerbAudioProcessor::createEditor()
 //==============================================================================
 void SacredTrinityVerbAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
 {
-    // You should use this method to store your parameters in the memory block.
-    // You could do that either as raw data, or use the XML or ValueTree classes
-    // as intermediaries to make it easy to save and load complex data.
+    auto state = treeState.copyState();
+    std::unique_ptr<juce::XmlElement> xml(state.createXml());
+    copyXmlToBinary(*xml, destData);
 }
 
 void SacredTrinityVerbAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
-    // You should use this method to restore your parameters from this memory block,
-    // whose contents will have been created by the getStateInformation() call.
+    std::unique_ptr<juce::XmlElement> xmlState(getXmlFromBinary(data, sizeInBytes));
+
+    if (xmlState.get() != nullptr)
+        if (xmlState->hasTagName(treeState.state.getType()))
+           treeState.replaceState(juce::ValueTree::fromXml(*xmlState));
 }
+
+
+juce::AudioProcessorValueTreeState::ParameterLayout SacredTrinityVerbAudioProcessor::createParameterLayout()
+{
+    std::vector<std::unique_ptr<juce::RangedAudioParameter>> params;
+
+    auto gainParam = std::make_unique<juce::AudioParameterFloat>("GAIN", "Gain", -48.0f, 0.0f, -10.0f);
+    params.push_back(std::move(gainParam));
+
+    return { params.begin(), params.end() };
+}
+
+void SacredTrinityVerbAudioProcessor::parameterChanged(const juce::String& parameterID, float newValue)
+{
+
+}
+
+float SacredTrinityVerbAudioProcessor::getRMSValue(const int channel) const
+{
+    jassert(channel == 0 || channel == 1);
+    if (channel == 0)
+        return rmsLevelLeft;
+    if (channel == 1)
+        return rmsLevelRight;
+    return 0.f;
+}
+
+
+
+
+
+
 
 //==============================================================================
 // This creates new instances of the plugin..
