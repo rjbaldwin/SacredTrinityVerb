@@ -16,12 +16,12 @@ public:
     void paint(juce::Graphics&) override;
     void resized() override;
 
+    void loadIR(juce::String fileName);
+
 private:
     SacredTrinityVerbAudioProcessor& audioProcessor;
 
-    juce::TextButton loadBtn;
     juce::ComboBox irMenu;
-    juce::TextButton hall2m, hall4m, hall5m, hall9m, smallRoom, balcony3m, balcony6m;
 
 
     std::unique_ptr<juce::FileChooser> fileChooser;

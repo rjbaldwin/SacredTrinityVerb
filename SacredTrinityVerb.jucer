@@ -7,6 +7,20 @@
               cppLanguageStandard="20">
   <MAINGROUP id="Lzf2k1" name="SacredTrinityVerb">
     <GROUP id="{F3B34D15-FD97-216A-9DC1-366E488ABFB9}" name="Source">
+      <GROUP id="{EA8E544B-4883-24BF-0A3B-F118317920F9}" name="IRs">
+        <FILE id="S5pYit" name="balcony_3m.wav" compile="0" resource="1" file="Source/IRs/balcony_3m.wav"/>
+        <FILE id="CohGDY" name="balcony_6m.wav" compile="0" resource="1" file="Source/IRs/balcony_6m.wav"/>
+        <FILE id="yYZbbK" name="main_hall_2m.wav" compile="0" resource="1"
+              file="Source/IRs/main_hall_2m.wav"/>
+        <FILE id="esH902" name="main_hall_4m.wav" compile="0" resource="1"
+              file="Source/IRs/main_hall_4m.wav"/>
+        <FILE id="lvYAOR" name="main_hall_5m.wav" compile="0" resource="1"
+              file="Source/IRs/main_hall_5m.wav"/>
+        <FILE id="LKRoxK" name="main_hall_9m.wav" compile="0" resource="1"
+              file="Source/IRs/main_hall_9m.wav"/>
+        <FILE id="wMEVmr" name="small_room_2m.wav" compile="0" resource="1"
+              file="Source/IRs/small_room_2m.wav"/>
+      </GROUP>
       <FILE id="t3jURg" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="SbVDoG" name="PluginProcessor.h" compile="0" resource="0"

@@ -7,26 +7,7 @@ SacredTrinityVerbAudioProcessorEditor::SacredTrinityVerbAudioProcessorEditor(Sac
                                               audioProcessor(p)
 {
     
-    addAndMakeVisible(loadBtn);
-    loadBtn.setButtonText("Load IR");
-    loadBtn.onClick = [this]()
-        {
-            fileChooser = std::make_unique<juce::FileChooser>("Choose IR", audioProcessor.root, "*");
-            const auto fileChooserFlags = juce::FileBrowserComponent::openMode | juce::FileBrowserComponent::canSelectFiles | juce::FileBrowserComponent::canSelectDirectories;
 
-            fileChooser->launchAsync(fileChooserFlags, [this](const juce::FileChooser& chooser)
-                {
-                    juce::File result(chooser.getResult());
-
-                    if (result.getFileExtension() == ".wav" || result.getFileExtension() == ".aif")
-                    {
-                        audioProcessor.savedFile = result;
-                        audioProcessor.root = result.getParentDirectory().getFullPathName();
-                        audioProcessor.irLoader.reset(); // clears the buffer for next ir file
-                        audioProcessor.irLoader.loadImpulseResponse(result, juce::dsp::Convolution::Stereo::yes, juce::dsp::Convolution::Trim::yes, 0);
-                    }
-                });
-        };
 
 
     addAndMakeVisible(irMenu);
@@ -38,12 +19,46 @@ SacredTrinityVerbAudioProcessorEditor::SacredTrinityVerbAudioProcessorEditor(Sac
     irMenu.addItem("Small Room 2m", 5);
     irMenu.addItem("Balcony 3m", 6);
     irMenu.addItem("Balcony 6m", 7);
-    irMenu.onChange = [this] {  };
-    //irMenu.setSelectedId(1);
+    irMenu.onChange = [this]
+        {  
+            int selectedId = irMenu.getSelectedId();
+
+            switch (selectedId)
+            {
+            case 1:
+                loadIR("Main_Hall_2m.wav");
+                break;
+            case 2:
+                loadIR("Main_Hall_4m.wav");
+                break;
+            case 3:
+                loadIR("Main_Hall_5m.wav");
+                break;
+            case 4:
+                loadIR("Main_Hall_9m.wav");
+                break;
+            case 5:
+                loadIR("Small_Room_2m.wav");
+                break;
+            case 6:
+                loadIR("Balcony_3m.wav");
+                break;
+            case 7:
+                loadIR("Balcony_6m.wav");
+                break;
+            default:
+                break;
+            }
+        };
+    
 
 
-    setSize (800, 600);
+    setSize (600, 600);
 }
+
+
+
+
 
 SacredTrinityVerbAudioProcessorEditor::~SacredTrinityVerbAudioProcessorEditor()
 {
@@ -64,14 +79,6 @@ void SacredTrinityVerbAudioProcessorEditor::resized()
 {
     // these live constants are a lifesaver.  Swap them out for actual values once gui has taken shape! 
 
-    // load button
-    const auto btnX =       getWidth() * JUCE_LIVE_CONSTANT(0.25);
-    const auto btnY =       getHeight() * JUCE_LIVE_CONSTANT(0.5);
-    const auto btnWidth =   getWidth() * JUCE_LIVE_CONSTANT(0.1);
-    const auto btnHeight =  btnWidth * 0.5;
-
-    loadBtn.setBounds(btnX, btnY, btnWidth, btnHeight);
-
     // combo box
     const auto irComboX = getWidth() * JUCE_LIVE_CONSTANT(0.25);
     const auto irComboY = getHeight() * 0.15; // JUCE_LIVE_CONSTANT(0.5); //0.15
@@ -82,5 +89,22 @@ void SacredTrinityVerbAudioProcessorEditor::resized()
 
 }
 
+// IR loader
+void SacredTrinityVerbAudioProcessorEditor::loadIR(juce::String fileName)
+{
 
+    auto file = juce::File::getCurrentWorkingDirectory().getChildFile(fileName);
+
+    DBG("Looking for file at: " << file.getFullPathName());
+
+    if (file.existsAsFile()) {
+        DBG("File found: " << file.getFullPathName());
+
+        audioProcessor.irLoader.reset(); // clears the buffer for next ir file
+        audioProcessor.irLoader.loadImpulseResponse(file, juce::dsp::Convolution::Stereo::yes, juce::dsp::Convolution::Trim::yes, 0);
+    }
+    else {
+        DBG("Error: File not found!");
+    }
+}
 
