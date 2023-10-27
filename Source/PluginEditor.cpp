@@ -1,6 +1,9 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
+
+
+
 //==============================================================================
 SacredTrinityVerbAudioProcessorEditor::SacredTrinityVerbAudioProcessorEditor(SacredTrinityVerbAudioProcessor& p)
                                             : AudioProcessorEditor(&p), 
@@ -8,7 +11,20 @@ SacredTrinityVerbAudioProcessorEditor::SacredTrinityVerbAudioProcessorEditor(Sac
 {
     
 
-
+    addAndMakeVisible(gainSlider);
+    gainSlider.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
+    gainSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 200, 25);
+    gainSlider.setTextValueSuffix(" dB");
+    gainSlider.setRange(-48.0f, 0.0f);
+    gainSlider.setNumDecimalPlacesToDisplay(1);
+    gainSlider.setValue(-10.0f);
+    gainSlider.addListener(this);
+    
+    
+    addAndMakeVisible(gainLabel);
+    gainLabel.attachToComponent(&gainSlider, false);
+    gainLabel.setText("Gain", juce::dontSendNotification);
+    
 
     addAndMakeVisible(irMenu);
     // TO DO - create a funtion fot this lot
@@ -75,6 +91,9 @@ void SacredTrinityVerbAudioProcessorEditor::paint(juce::Graphics& g)
     g.setColour(juce::Colours::white);
     g.setFont(15.0f);
     g.drawFittedText ("Sacred Trinityverb V1 - RJBaldwin", getLocalBounds(), juce::Justification::centredTop, 1);
+
+
+
 }
 
 void SacredTrinityVerbAudioProcessorEditor::resized()
@@ -89,6 +108,12 @@ void SacredTrinityVerbAudioProcessorEditor::resized()
 
     irMenu.setBounds(irComboX, irComboY, irComboWidth, irComboHeight);
 
+    const auto gsX = getWidth() * JUCE_LIVE_CONSTANT(0.06);
+    const auto gsY = getHeight()* JUCE_LIVE_CONSTANT(0.25);
+    const auto gsW = getWidth() * JUCE_LIVE_CONSTANT(0.12);
+    const auto gsH = getHeight() * JUCE_LIVE_CONSTANT(0.30);
+    gainSlider.setBounds(gsX,gsY,gsW,gsH);
+
    
 
 }
@@ -102,5 +127,15 @@ void SacredTrinityVerbAudioProcessorEditor::loadIRbinary(const char* resourceNam
     audioProcessor.irLoader.reset(); // clears the buffer for next ir file
     audioProcessor.irLoader.loadImpulseResponse(sourceData, resourceSize, juce::dsp::Convolution::Stereo::yes, juce::dsp::Convolution::Trim::yes, 0, juce::dsp::Convolution::Normalise::yes);
 
+}
+
+// gain too decibels
+
+void SacredTrinityVerbAudioProcessorEditor::sliderValueChanged(juce::Slider* slider)
+{
+    if (slider == &gainSlider)
+    {
+        audioProcessor.rawVolume = pow(10, gainSlider.getValue() / 20);
+    }
 }
 

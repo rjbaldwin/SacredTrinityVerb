@@ -53,6 +53,11 @@ public:
 
     juce::File root, savedFile;
     juce::dsp::Convolution irLoader;
+
+
+    // for gain
+    double rawVolume;
+
 private:
 
     juce::dsp::ProcessSpec spec;

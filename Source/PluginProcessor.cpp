@@ -146,6 +146,17 @@ void SacredTrinityVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& bu
     {
         irLoader.process(juce::dsp::ProcessContextReplacing<float>(block));
     }
+
+    for (int channel = 0; channel < totalNumInputChannels; ++channel)
+    {
+        auto* channelData = buffer.getWritePointer(channel);
+
+        for (int sample = 0; sample < buffer.getNumSamples(); ++sample)
+        {
+            channelData[sample] = buffer.getSample(channel, sample) * rawVolume;
+        }
+    }
+
 }
 
 //==============================================================================
