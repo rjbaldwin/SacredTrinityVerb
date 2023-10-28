@@ -38,6 +38,7 @@ SacredTrinityVerbAudioProcessorEditor::SacredTrinityVerbAudioProcessorEditor(Sac
     irMenu.addItem("Balcony 3m", 6);
     irMenu.addItem("Balcony 6m", 7);
 
+
     //irMenuAttachment = std::make_unique<ComboBoxAttachment>(audioProcessor.treeState, "IRMENU", irMenu);
 
     irMenu.onChange = [this]
@@ -149,7 +150,7 @@ void SacredTrinityVerbAudioProcessorEditor::loadIRbinary(const char* resourceNam
 
 }
 
-// gain too decibels
+// gain to decibels
 
 void SacredTrinityVerbAudioProcessorEditor::sliderValueChanged(juce::Slider* slider)
 {

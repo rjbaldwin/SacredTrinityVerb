@@ -2,7 +2,7 @@
 // Sacred Trinity Church Reverb plugin.
 // This plugin uses impulse responses that I gather with my third year BAMP students 
 // from Sacred Trinity Church in Salford, Greater Manchester.  There are 3 main rooms that we produce impulse responses of.
-// Thanks to Rev Andy Salmon for allowing in to do this for the past 10 years in a row!
+// Thanks to Rev Andy Salmon for allowing me to do this for the past 10 years in a row!
 // This is my third piece of proper software ever! 
 
 #include "PluginProcessor.h"
@@ -148,8 +148,7 @@ void SacredTrinityVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& bu
     auto totalNumOutputChannels = getTotalNumOutputChannels();
 
 
-    rmsLevelLeft =  juce::Decibels::gainToDecibels(buffer.getRMSLevel(0, 0, buffer.getNumSamples()));
-    rmsLevelRight = juce::Decibels::gainToDecibels(buffer.getRMSLevel(1, 0, buffer.getNumSamples()));
+   
 
 
 
@@ -170,6 +169,9 @@ void SacredTrinityVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& bu
             channelData[sample] = buffer.getSample(channel, sample) * rawVolume;
         }
     }
+
+    rmsLevelLeft = juce::Decibels::gainToDecibels(buffer.getRMSLevel(0, 0, buffer.getNumSamples()));
+    rmsLevelRight = juce::Decibels::gainToDecibels(buffer.getRMSLevel(1, 0, buffer.getNumSamples()));
 
     
 }
