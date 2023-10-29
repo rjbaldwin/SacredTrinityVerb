@@ -31,11 +31,18 @@ public:
 private:
     SacredTrinityVerbAudioProcessor& audioProcessor;
     juce::ComboBox irMenu;
-    std::unique_ptr<juce::FileChooser> fileChooser;
+    std::unique_ptr<ComboBoxAttachment> irMenuAttachment;
+    //std::unique_ptr<juce::FileChooser> fileChooser;
     juce::Slider gainSlider;
     std::unique_ptr<SliderAttachment> gainSliderAttachment;
-    std::unique_ptr<ComboBoxAttachment> irMenuAttachment;
     juce::Label gainLabel;
+
+    juce::Slider mixSlider;
+    std::unique_ptr<SliderAttachment> mixSliderAttachment;
+    juce::Label mixLabel;
+   
+
+
 
     Gui::HorizontalMeter horizontalMeterL, horizontalMeterR;
 

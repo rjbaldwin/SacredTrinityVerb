@@ -10,7 +10,7 @@ SacredTrinityVerbAudioProcessorEditor::SacredTrinityVerbAudioProcessorEditor(Sac
                                               audioProcessor(p)
 {
     
-
+    // gain slider
     addAndMakeVisible(gainSlider);
     gainSlider.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
     gainSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 200, 25);
@@ -26,6 +26,23 @@ SacredTrinityVerbAudioProcessorEditor::SacredTrinityVerbAudioProcessorEditor(Sac
     gainLabel.setText("Gain", juce::dontSendNotification);
 
     gainSliderAttachment = std::make_unique<SliderAttachment>(audioProcessor.treeState, "GAIN", gainSlider);
+
+    // mix slider
+    addAndMakeVisible(mixSlider);
+    mixSlider.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
+    mixSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 200, 25);
+    mixSlider.setTextValueSuffix(" %");
+    mixSlider.setRange(0.f,100.f);
+    mixSlider.setNumDecimalPlacesToDisplay(0);
+    mixSlider.setValue(0.0f);
+    mixSlider.addListener(this);
+
+
+    addAndMakeVisible(mixLabel);
+    mixLabel.attachToComponent(&mixSlider, false);
+    mixLabel.setText("Dry/Wet", juce::dontSendNotification);
+
+    mixSliderAttachment = std::make_unique<SliderAttachment>(audioProcessor.treeState, "MIX", mixSlider);
     
 
     addAndMakeVisible(irMenu);
@@ -73,8 +90,14 @@ SacredTrinityVerbAudioProcessorEditor::SacredTrinityVerbAudioProcessorEditor(Sac
             default:
                 break;
             }
+
+            
+
         };
     
+
+
+
 
     // level meter
     addAndMakeVisible(horizontalMeterL);
@@ -124,18 +147,27 @@ void SacredTrinityVerbAudioProcessorEditor::resized()
     const auto irComboY = getHeight() * 0.15; // JUCE_LIVE_CONSTANT(0.5); //0.15
     const auto irComboWidth = getWidth() * JUCE_LIVE_CONSTANT(0.25);
     const auto irComboHeight = getHeight() * 0.06; //JUCE_LIVE_CONSTANT(0.5); // 0.06
-
     irMenu.setBounds(irComboX, irComboY, irComboWidth, irComboHeight);
-
+    // gain slider
     const auto gsX = getWidth() * JUCE_LIVE_CONSTANT(0.06);
     const auto gsY = getHeight()* JUCE_LIVE_CONSTANT(0.25);
     const auto gsW = getWidth() * JUCE_LIVE_CONSTANT(0.12);
     const auto gsH = getHeight() * JUCE_LIVE_CONSTANT(0.30);
     gainSlider.setBounds(gsX,gsY,gsW,gsH);
+    // mix slider
+    const auto msX = getWidth() * JUCE_LIVE_CONSTANT(0.58);
+    const auto msY = getHeight() * JUCE_LIVE_CONSTANT(0.25);
+    const auto msW = getWidth() * JUCE_LIVE_CONSTANT(0.30);
+    const auto msH = getHeight() * JUCE_LIVE_CONSTANT(0.30);
+    mixSlider.setBounds(msX,msY,msW,msW);
+
 
     // level meter
     horizontalMeterL.setBounds(100, 400, 200, 15);
     horizontalMeterR.setBounds(100, 420, 200, 15);
+
+ 
+
 
 }
 
@@ -146,7 +178,7 @@ void SacredTrinityVerbAudioProcessorEditor::loadIRbinary(const char* resourceNam
     const void* sourceData =  BinaryData::getNamedResource(resourceName, dataSizeInBytes);
 
     audioProcessor.irLoader.reset(); // clears the buffer for next ir file
-    audioProcessor.irLoader.loadImpulseResponse(sourceData, resourceSize, juce::dsp::Convolution::Stereo::yes, juce::dsp::Convolution::Trim::yes, 0, juce::dsp::Convolution::Normalise::yes);
+    audioProcessor.irLoader.loadImpulseResponse(sourceData, resourceSize, juce::dsp::Convolution::Stereo::yes, juce::dsp::Convolution::Trim::no, 0, juce::dsp::Convolution::Normalise::yes);
 
 }
 
@@ -158,5 +190,8 @@ void SacredTrinityVerbAudioProcessorEditor::sliderValueChanged(juce::Slider* sli
     {
         audioProcessor.rawVolume = pow(10, gainSlider.getValue() / 20);
     }
+
+  
+
 }
 

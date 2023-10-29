@@ -147,12 +147,25 @@ void SacredTrinityVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& bu
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
 
-
-   
-
-
-
     juce::dsp::AudioBlock<float>block{ buffer };
+
+
+
+ 
+    // for output gain
+    for (int channel = 0; channel < totalNumInputChannels; ++channel)
+    {
+        auto* data = buffer.getWritePointer(channel);
+
+        for (int sample = 0; sample < buffer.getNumSamples(); ++sample)
+        {
+            auto input = data[sample];
+            float output;
+
+            data[sample] = buffer.getSample(channel, sample) * rawVolume;
+
+        }
+    }
 
     // for IR loader
     if (irLoader.getCurrentIRSize() > 0)
@@ -160,16 +173,7 @@ void SacredTrinityVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& bu
         irLoader.process(juce::dsp::ProcessContextReplacing<float>(block));
     }
 
-    for (int channel = 0; channel < totalNumInputChannels; ++channel)
-    {
-        auto* channelData = buffer.getWritePointer(channel);
-
-        for (int sample = 0; sample < buffer.getNumSamples(); ++sample)
-        {
-            channelData[sample] = buffer.getSample(channel, sample) * rawVolume;
-        }
-    }
-
+    // for level meters
     rmsLevelLeft = juce::Decibels::gainToDecibels(buffer.getRMSLevel(0, 0, buffer.getNumSamples()));
     rmsLevelRight = juce::Decibels::gainToDecibels(buffer.getRMSLevel(1, 0, buffer.getNumSamples()));
 
@@ -212,11 +216,19 @@ juce::AudioProcessorValueTreeState::ParameterLayout SacredTrinityVerbAudioProces
     auto gainParam = std::make_unique<juce::AudioParameterFloat>("GAIN", "Gain", -48.0f, 0.0f, -10.0f);
     params.push_back(std::move(gainParam));
 
+    auto mixParam = std::make_unique<juce::AudioParameterFloat>("MIX", "Mix", 0.f, 100.0f, 0.0f);
+    params.push_back(std::move(mixParam));
+
+ 
+
+
     return { params.begin(), params.end() };
 }
 
 void SacredTrinityVerbAudioProcessor::parameterChanged(const juce::String& parameterID, float newValue)
 {
+
+
 
 }
 
