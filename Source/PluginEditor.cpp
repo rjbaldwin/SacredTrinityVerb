@@ -55,8 +55,9 @@ SacredTrinityVerbAudioProcessorEditor::SacredTrinityVerbAudioProcessorEditor(Sac
     irMenu.addItem("Balcony 3m", 6);
     irMenu.addItem("Balcony 6m", 7);
 
+    irMenuAttachment = std::make_unique<ComboBoxAttachment>(audioProcessor.treeState, "IRCHOICE", irMenu);
 
-    //irMenuAttachment = std::make_unique<ComboBoxAttachment>(audioProcessor.treeState, "IRMENU", irMenu);
+   
 
     irMenu.onChange = [this]
         {  
@@ -189,6 +190,7 @@ void SacredTrinityVerbAudioProcessorEditor::sliderValueChanged(juce::Slider* sli
     if (slider == &gainSlider)
     {
         audioProcessor.rawVolume = pow(10, gainSlider.getValue() / 20);
+        DBG("Raw Volume: " << audioProcessor.rawVolume);
     }
 
   

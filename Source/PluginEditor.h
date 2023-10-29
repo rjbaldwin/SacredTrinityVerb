@@ -26,13 +26,14 @@ public:
     void sliderValueChanged(juce::Slider* slider);
 
     using SliderAttachment = juce::AudioProcessorValueTreeState::SliderAttachment;
-    using ComboBoxAttachment = juce::AudioProcessorValueTreeState::ComboBoxAttachment;
+    
+
 
 private:
     SacredTrinityVerbAudioProcessor& audioProcessor;
     juce::ComboBox irMenu;
-    std::unique_ptr<ComboBoxAttachment> irMenuAttachment;
-    //std::unique_ptr<juce::FileChooser> fileChooser;
+    
+    
     juce::Slider gainSlider;
     std::unique_ptr<SliderAttachment> gainSliderAttachment;
     juce::Label gainLabel;
@@ -40,10 +41,10 @@ private:
     juce::Slider mixSlider;
     std::unique_ptr<SliderAttachment> mixSliderAttachment;
     juce::Label mixLabel;
-   
+    using ComboBoxAttachment = juce::AudioProcessorValueTreeState::ComboBoxAttachment;
+    std::unique_ptr<ComboBoxAttachment> irMenuAttachment;
 
-
-
+    // for metering
     Gui::HorizontalMeter horizontalMeterL, horizontalMeterR;
 
 

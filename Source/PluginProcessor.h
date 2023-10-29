@@ -60,8 +60,11 @@ public:
 
     // for gain
     double rawVolume{};
+    // for mix
+    float mix{ 0.0 };
 
     float getRMSValue(const int channel) const;
+
 
 private:
 
