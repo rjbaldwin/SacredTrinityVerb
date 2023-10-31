@@ -10,6 +10,8 @@
       <GROUP id="{35A938CD-1404-7358-2189-61E7AD53C6E6}" name="Component">
         <FILE id="ljS4WB" name="HorizontalMeter.h" compile="0" resource="0"
               file="Source/Component/HorizontalMeter.h"/>
+        <FILE id="OpPupQ" name="VerticalDiscreteMeter.h" compile="0" resource="0"
+              file="Source/Component/VerticalDiscreteMeter.h"/>
       </GROUP>
       <GROUP id="{EA8E544B-4883-24BF-0A3B-F118317920F9}" name="IRs">
         <FILE id="S5pYit" name="balcony_3m.wav" compile="0" resource="1" file="Source/IRs/balcony_3m.wav"/>

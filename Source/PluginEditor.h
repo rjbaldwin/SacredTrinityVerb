@@ -4,6 +4,7 @@
 #include "PluginProcessor.h"
 #include "BinaryData.h"
 #include "Component/HorizontalMeter.h"
+#include "Component/VerticalDiscreteMeter.h"
 
 //==============================================================================
 
@@ -45,7 +46,8 @@ private:
     std::unique_ptr<ComboBoxAttachment> irMenuAttachment;
 
     // for metering
-    Gui::HorizontalMeter horizontalMeterL, horizontalMeterR;
+    //Gui::HorizontalMeter horizontalMeterL, horizontalMeterR;
+    Gui::VerticalDiscreteMeter verticalDiscreteMeterL, verticalDiscreteMeterR;
 
 
 

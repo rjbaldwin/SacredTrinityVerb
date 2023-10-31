@@ -169,11 +169,24 @@ void SacredTrinityVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& bu
     juce::dsp::DryWetMixer<float>wetDryMixer;
     float wetDryValue = *treeState.getRawParameterValue("MIX") / 100.0f;
    
-    wetDryMixer.setMixingRule(juce::dsp::DryWetMixingRule::balanced);
+    wetDryMixer.setMixingRule(juce::dsp::DryWetMixingRule::linear);
     wetDryMixer.setWetMixProportion(wetDryValue);
     wetDryMixer.setWetLatency(0.0);
    
     wetDryMixer.prepare(spec);
+
+    
+    // the dry buffer
+    wetDryMixer.pushDrySamples(buffer);
+    
+    // for IR loader
+    if (irLoader.getCurrentIRSize() > 0)
+    {
+        irLoader.process(juce::dsp::ProcessContextReplacing<float>(block));
+    }
+
+    // the wet buffer
+    wetDryMixer.mixWetSamples(block);
 
     // for output gain
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
@@ -189,17 +202,6 @@ void SacredTrinityVerbAudioProcessor::processBlock (juce::AudioBuffer<float>& bu
 
         }
     }
-    // the dry buffer
-    wetDryMixer.pushDrySamples(buffer);
-    
-    // for IR loader
-    if (irLoader.getCurrentIRSize() > 0)
-    {
-        irLoader.process(juce::dsp::ProcessContextReplacing<float>(block));
-    }
-
-    // the wet buffer
-    wetDryMixer.mixWetSamples(block);
 
 
     // for level meters
@@ -251,7 +253,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout SacredTrinityVerbAudioProces
 
     std::vector<std::unique_ptr<juce::RangedAudioParameter>> params;
 
-    auto gainParam = std::make_unique<juce::AudioParameterFloat>("GAIN", "Gain", -48.0f, 0.0f, -10.0f);
+    auto gainParam = std::make_unique<juce::AudioParameterFloat>("GAIN", "Gain", -48.0f, 0.0f, 0.0f);
     params.push_back(std::move(gainParam));
 
     auto mixParam = std::make_unique<juce::AudioParameterFloat>("MIX", "Mix", 0.f, 100.0f, 1.0f);

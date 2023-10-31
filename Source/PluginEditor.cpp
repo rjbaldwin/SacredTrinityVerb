@@ -7,7 +7,9 @@
 //==============================================================================
 SacredTrinityVerbAudioProcessorEditor::SacredTrinityVerbAudioProcessorEditor(SacredTrinityVerbAudioProcessor& p)
                                             : AudioProcessorEditor(&p), 
-                                              audioProcessor(p)
+                                              audioProcessor(p),
+                                              verticalDiscreteMeterL{ [&] {return audioProcessor.getRMSValue(0); } },
+                                              verticalDiscreteMeterR{ [&] {return audioProcessor.getRMSValue(1); } }
 {
     
     // gain slider
@@ -24,13 +26,14 @@ SacredTrinityVerbAudioProcessorEditor::SacredTrinityVerbAudioProcessorEditor(Sac
     addAndMakeVisible(gainLabel);
     gainLabel.attachToComponent(&gainSlider, false);
     gainLabel.setText("Gain", juce::dontSendNotification);
+    gainLabel.setJustificationType(juce::Justification::centred);
 
     gainSliderAttachment = std::make_unique<SliderAttachment>(audioProcessor.treeState, "GAIN", gainSlider);
 
     // mix slider
     addAndMakeVisible(mixSlider);
     mixSlider.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
-    mixSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 200, 25);
+    mixSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 60, 25);
     mixSlider.setTextValueSuffix(" %");
     mixSlider.setRange(0.f,100.f);
     mixSlider.setNumDecimalPlacesToDisplay(0);
@@ -40,13 +43,14 @@ SacredTrinityVerbAudioProcessorEditor::SacredTrinityVerbAudioProcessorEditor(Sac
 
     addAndMakeVisible(mixLabel);
     mixLabel.attachToComponent(&mixSlider, false);
-    mixLabel.setText("Dry/Wet", juce::dontSendNotification);
+    mixLabel.setText("Mix", juce::dontSendNotification);
+    mixLabel.setJustificationType(juce::Justification::centred);
+    
 
     mixSliderAttachment = std::make_unique<SliderAttachment>(audioProcessor.treeState, "MIX", mixSlider);
     
 
     addAndMakeVisible(irMenu);
-    // TO DO - create a funtion fot this lot
     irMenu.addItem("Main Hall 2m", 1);
     irMenu.addItem("Main Hall 4m", 2);
     irMenu.addItem("Main Hall 5m", 3);
@@ -101,12 +105,12 @@ SacredTrinityVerbAudioProcessorEditor::SacredTrinityVerbAudioProcessorEditor(Sac
 
 
     // level meter
-    addAndMakeVisible(horizontalMeterL);
-    addAndMakeVisible(horizontalMeterR);
+    
+    addAndMakeVisible(verticalDiscreteMeterL);
+    addAndMakeVisible(verticalDiscreteMeterR);
     startTimerHz(24);
 
-
-    setSize (600, 600);
+    setSize (500, 500);
 }
 
 
@@ -119,10 +123,10 @@ SacredTrinityVerbAudioProcessorEditor::~SacredTrinityVerbAudioProcessorEditor()
 
 void SacredTrinityVerbAudioProcessorEditor::timerCallback()
 {
-    horizontalMeterL.setLevel(audioProcessor.getRMSValue(0));
+ /*   horizontalMeterL.setLevel(audioProcessor.getRMSValue(0));
     horizontalMeterR.setLevel(audioProcessor.getRMSValue(1));
     horizontalMeterL.repaint();
-    horizontalMeterR.repaint();
+    horizontalMeterR.repaint();*/
 }
 
 //==============================================================================
@@ -145,7 +149,7 @@ void SacredTrinityVerbAudioProcessorEditor::resized()
 
     // combo box
     const auto irComboX = getWidth() * JUCE_LIVE_CONSTANT(0.25);
-    const auto irComboY = getHeight() * 0.15; // JUCE_LIVE_CONSTANT(0.5); //0.15
+    const auto irComboY = getHeight() * JUCE_LIVE_CONSTANT(0.15); 
     const auto irComboWidth = getWidth() * JUCE_LIVE_CONSTANT(0.25);
     const auto irComboHeight = getHeight() * 0.06; //JUCE_LIVE_CONSTANT(0.5); // 0.06
     irMenu.setBounds(irComboX, irComboY, irComboWidth, irComboHeight);
@@ -156,7 +160,7 @@ void SacredTrinityVerbAudioProcessorEditor::resized()
     const auto gsH = getHeight() * JUCE_LIVE_CONSTANT(0.30);
     gainSlider.setBounds(gsX,gsY,gsW,gsH);
     // mix slider
-    const auto msX = getWidth() * JUCE_LIVE_CONSTANT(0.58);
+    const auto msX = getWidth() * JUCE_LIVE_CONSTANT(0.73);
     const auto msY = getHeight() * JUCE_LIVE_CONSTANT(0.25);
     const auto msW = getWidth() * JUCE_LIVE_CONSTANT(0.30);
     const auto msH = getHeight() * JUCE_LIVE_CONSTANT(0.30);
@@ -164,8 +168,10 @@ void SacredTrinityVerbAudioProcessorEditor::resized()
 
 
     // level meter
-    horizontalMeterL.setBounds(100, 400, 200, 15);
-    horizontalMeterR.setBounds(100, 420, 200, 15);
+  
+
+    verticalDiscreteMeterL.setBounds(200, 200, 25, 200);
+    verticalDiscreteMeterR.setBounds(230, 200, 25, 200);
 
  
 
