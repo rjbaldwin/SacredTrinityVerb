@@ -8,6 +8,9 @@
 
 namespace BinaryData
 {
+    extern const char*   guiBack1_jpg;
+    const int            guiBack1_jpgSize = 160421;
+
     extern const char*   tempBack2_jpg;
     const int            tempBack2_jpgSize = 161837;
 
@@ -36,7 +39,7 @@ namespace BinaryData
     const int            small_room_2m_wavSize = 1304854;
 
     // Number of elements in the namedResourceList and originalFileNames arrays.
-    const int namedResourceListSize = 9;
+    const int namedResourceListSize = 10;
 
     // Points to the start of a list of resource names.
     extern const char* namedResourceList[];

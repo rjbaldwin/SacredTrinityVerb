@@ -62,8 +62,8 @@ namespace Gui
 		void resized() override
 		{
 			const auto bounds = getLocalBounds().toFloat();
-			juce::ColourGradient gradient{ juce::Colours::green, bounds.getBottomLeft(), juce::Colours::red, bounds.getTopLeft(), false };
-			gradient.addColour(0.3, juce::Colours::yellow);
+			juce::ColourGradient gradient{ juce::Colours::lightblue, bounds.getBottomLeft(), juce::Colours::blueviolet, bounds.getTopLeft(), false };
+			gradient.addColour(0.3, juce::Colours::violet);
 
 			const auto bulbHeight = getLocalBounds().getHeight() / totalNumberOfBulbs;
 			auto bulbBounds = getLocalBounds();

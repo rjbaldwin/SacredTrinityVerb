@@ -9,14 +9,12 @@
 //==============================================================================
 
 // the look and feel class
-class OtherLookAndFeel : public juce::LookAndFeel_V3
+class OtherLookAndFeel : public juce::LookAndFeel_V1
 {
 public:
 
 
 };
-
-
 
 
 

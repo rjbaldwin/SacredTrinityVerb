@@ -43,7 +43,7 @@
 namespace ProjectInfo
 {
     const char* const  projectName    = "SacredTrinityVerb";
-    const char* const  companyName    = "RJBaldwin";
+    const char* const  companyName    = "Supercoiled Samples";
     const char* const  versionString  = "1.0.0";
     const int          versionNumber  = 0x10000;
 }

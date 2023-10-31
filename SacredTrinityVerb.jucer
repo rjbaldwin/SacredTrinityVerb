@@ -2,12 +2,13 @@
 
 <JUCERPROJECT id="ECvmrs" name="SacredTrinityVerb" projectType="audioplug"
               useAppConfig="0" addUsingNamespaceToJuceHeader="0" displaySplashScreen="1"
-              jucerFormatVersion="1" companyName="RJBaldwin" companyCopyright="RJBaldwin"
+              jucerFormatVersion="1" companyName="Supercoiled Samples" companyCopyright="RJBaldwin 2023"
               companyEmail="info@rjbaldwin.com" pluginFormats="buildVST3" pluginVST3Category="Reverb,Stereo"
-              cppLanguageStandard="20">
+              cppLanguageStandard="20" companyWebsite="www.rjbaldwin.com" pluginDesc="Reverb">
   <MAINGROUP id="Lzf2k1" name="SacredTrinityVerb">
     <GROUP id="{F3B34D15-FD97-216A-9DC1-366E488ABFB9}" name="Source">
       <GROUP id="{1BE300E3-57C3-E7AC-BDAC-A64BF953823A}" name="Images">
+        <FILE id="ucayZJ" name="guiBack1.jpg" compile="0" resource="1" file="Source/Images/guiBack1.jpg"/>
         <FILE id="BoKjR8" name="tempBack2.jpg" compile="0" resource="1" file="Source/Images/tempBack2.jpg"/>
         <FILE id="oiFAAR" name="tempBack3.jpg" compile="0" resource="1" file="Source/Images/tempBack3.jpg"/>
       </GROUP>

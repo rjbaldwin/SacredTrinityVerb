@@ -182,7 +182,7 @@ void SacredTrinityVerbAudioProcessorEditor::paint(juce::Graphics& g)
     g.setFont(16.0f);
     g.drawFittedText ("Sacred Trinityverb V1 - RJBaldwin", getLocalBounds(), juce::Justification::centredTop, 1);
 
-    auto background = juce::ImageCache::getFromMemory(BinaryData::tempBack3_jpg, BinaryData::tempBack3_jpgSize);
+    auto background = juce::ImageCache::getFromMemory(BinaryData::guiBack1_jpg, BinaryData::guiBack1_jpgSize);
     g.drawImageWithin(background, 0, 0, getWidth(), getHeight(), juce::RectanglePlacement::doNotResize);
 
 }
@@ -193,22 +193,22 @@ void SacredTrinityVerbAudioProcessorEditor::resized()
 
     // combo box
     
-    const auto irComboY = getHeight() * JUCE_LIVE_CONSTANT(0.15); 
    
-    irMenu.setBounds(145, 255, 120,25);
+   
+    irMenu.setBounds(145, 300, 120,25);
 
     // gain slider
-    gainSlider.setBounds(50,200,80,80);
+    gainSlider.setBounds(50,300,80,80);
 
     // mix slider
-    mixSlider.setBounds(280,200,80,80);
+    mixSlider.setBounds(280,300,80,80);
 
     // level meter
-    verticalDiscreteMeterL.setBounds(200, 50, 25, 200);
-    verticalDiscreteMeterR.setBounds(215, 50, 25, 200);
+    verticalDiscreteMeterL.setBounds(180, 80, 25, 200);
+    verticalDiscreteMeterR.setBounds(215, 80, 25, 200);
 
     // info button
-    infoButton.setBounds(350, 20, 30, 30);
+    infoButton.setBounds(370, 350, 30, 30);
 
     
  
