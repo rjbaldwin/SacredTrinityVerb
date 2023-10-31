@@ -63,7 +63,7 @@ namespace Gui
 		{
 			const auto bounds = getLocalBounds().toFloat();
 			juce::ColourGradient gradient{ juce::Colours::green, bounds.getBottomLeft(), juce::Colours::red, bounds.getTopLeft(), false };
-			gradient.addColour(0.5, juce::Colours::yellow);
+			gradient.addColour(0.3, juce::Colours::yellow);
 
 			const auto bulbHeight = getLocalBounds().getHeight() / totalNumberOfBulbs;
 			auto bulbBounds = getLocalBounds();
@@ -85,6 +85,6 @@ namespace Gui
 	private:
 		std::function<float()> valueSupplier;
 		std::vector<std::unique_ptr<Bulb>> bulbs;
-		const int totalNumberOfBulbs = 15;
+		const int totalNumberOfBulbs = 10;
 	};
 }

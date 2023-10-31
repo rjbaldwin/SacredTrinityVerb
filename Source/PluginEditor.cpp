@@ -14,26 +14,34 @@ SacredTrinityVerbAudioProcessorEditor::SacredTrinityVerbAudioProcessorEditor(Sac
     
     // gain slider
     addAndMakeVisible(gainSlider);
-    gainSlider.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
+    gainSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
+    gainSlider.setLookAndFeel(&otherLookandFeel);
     gainSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 200, 25);
     gainSlider.setTextValueSuffix(" dB");
     gainSlider.setRange(-48.0f, 0.0f);
     gainSlider.setNumDecimalPlacesToDisplay(1);
     gainSlider.setValue(-10.0f);
     gainSlider.addListener(this);
-    
-    
     addAndMakeVisible(gainLabel);
+
+    gainLabel.setLookAndFeel(&otherLookandFeel);
     gainLabel.attachToComponent(&gainSlider, false);
     gainLabel.setText("Gain", juce::dontSendNotification);
+    gainLabel.setColour(juce::Label::textColourId, juce::Colours::white);
+    juce::Font gainfont = gainLabel.getFont();
+    gainfont.setHeight(20.0f);
+    gainfont.setBold(true);
+    gainLabel.setFont(gainfont);
+ 
     gainLabel.setJustificationType(juce::Justification::centred);
 
     gainSliderAttachment = std::make_unique<SliderAttachment>(audioProcessor.treeState, "GAIN", gainSlider);
 
     // mix slider
     addAndMakeVisible(mixSlider);
-    mixSlider.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
-    mixSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 60, 25);
+    mixSlider.setLookAndFeel(&otherLookandFeel);
+    mixSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
+    mixSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 200, 25);
     mixSlider.setTextValueSuffix(" %");
     mixSlider.setRange(0.f,100.f);
     mixSlider.setNumDecimalPlacesToDisplay(0);
@@ -42,8 +50,14 @@ SacredTrinityVerbAudioProcessorEditor::SacredTrinityVerbAudioProcessorEditor(Sac
 
 
     addAndMakeVisible(mixLabel);
+    mixLabel.setLookAndFeel(&otherLookandFeel);
     mixLabel.attachToComponent(&mixSlider, false);
     mixLabel.setText("Mix", juce::dontSendNotification);
+    mixLabel.setColour(juce::Label::textColourId, juce::Colours::white);
+    juce::Font mixfont = mixLabel.getFont();
+    mixfont.setHeight(20.0f);
+    mixfont.setBold(true);
+    mixLabel.setFont(mixfont);
     mixLabel.setJustificationType(juce::Justification::centred);
     
 
@@ -51,6 +65,7 @@ SacredTrinityVerbAudioProcessorEditor::SacredTrinityVerbAudioProcessorEditor(Sac
     
 
     addAndMakeVisible(irMenu);
+    //irMenu.setLookAndFeel(&otherLookandFeel);
     irMenu.addItem("Main Hall 2m", 1);
     irMenu.addItem("Main Hall 4m", 2);
     irMenu.addItem("Main Hall 5m", 3);
@@ -60,6 +75,34 @@ SacredTrinityVerbAudioProcessorEditor::SacredTrinityVerbAudioProcessorEditor(Sac
     irMenu.addItem("Balcony 6m", 7);
 
     irMenuAttachment = std::make_unique<ComboBoxAttachment>(audioProcessor.treeState, "IRCHOICE", irMenu);
+
+    // info button
+    addAndMakeVisible(infoButton);
+    infoButton.setLookAndFeel(&otherLookandFeel);
+    infoButton.setButtonText("?");
+    infoButton.onClick = [this]()
+        {
+            infoWindow = std::make_unique<juce::AlertWindow>("Info", 
+                                                            " Enter message here", 
+                                                            juce::MessageBoxIconType::InfoIcon, 
+                                                            nullptr);
+
+            juce::String infoMessage{
+                "Impulse responses captured by RJ Baldwin at 96kHz using a stereo pair of AKG c414s.  Thanks to rev Andy Salmon of Sacred Trinity Church, Salford. "
+            };
+            infoWindow->showMessageBoxAsync(juce::MessageBoxIconType::InfoIcon, "Info", infoMessage, "OK", nullptr, juce::ModalCallbackFunction::create([this](int result)
+                {
+                   
+                }
+
+            ));
+          
+        };
+   
+   
+
+    
+   
 
    
 
@@ -110,7 +153,7 @@ SacredTrinityVerbAudioProcessorEditor::SacredTrinityVerbAudioProcessorEditor(Sac
     addAndMakeVisible(verticalDiscreteMeterR);
     startTimerHz(24);
 
-    setSize (500, 500);
+    setSize (410, 410);
 }
 
 
@@ -136,43 +179,38 @@ void SacredTrinityVerbAudioProcessorEditor::paint(juce::Graphics& g)
     g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
 
     g.setColour(juce::Colours::white);
-    g.setFont(15.0f);
+    g.setFont(16.0f);
     g.drawFittedText ("Sacred Trinityverb V1 - RJBaldwin", getLocalBounds(), juce::Justification::centredTop, 1);
 
-
+    auto background = juce::ImageCache::getFromMemory(BinaryData::tempBack3_jpg, BinaryData::tempBack3_jpgSize);
+    g.drawImageWithin(background, 0, 0, getWidth(), getHeight(), juce::RectanglePlacement::doNotResize);
 
 }
 
 void SacredTrinityVerbAudioProcessorEditor::resized()
 {
-    // these live constants are a lifesaver.  Swap them out for actual values once gui has taken shape! 
+   
 
     // combo box
-    const auto irComboX = getWidth() * JUCE_LIVE_CONSTANT(0.25);
+    
     const auto irComboY = getHeight() * JUCE_LIVE_CONSTANT(0.15); 
-    const auto irComboWidth = getWidth() * JUCE_LIVE_CONSTANT(0.25);
-    const auto irComboHeight = getHeight() * 0.06; //JUCE_LIVE_CONSTANT(0.5); // 0.06
-    irMenu.setBounds(irComboX, irComboY, irComboWidth, irComboHeight);
-    // gain slider
-    const auto gsX = getWidth() * JUCE_LIVE_CONSTANT(0.06);
-    const auto gsY = getHeight()* JUCE_LIVE_CONSTANT(0.25);
-    const auto gsW = getWidth() * JUCE_LIVE_CONSTANT(0.12);
-    const auto gsH = getHeight() * JUCE_LIVE_CONSTANT(0.30);
-    gainSlider.setBounds(gsX,gsY,gsW,gsH);
-    // mix slider
-    const auto msX = getWidth() * JUCE_LIVE_CONSTANT(0.73);
-    const auto msY = getHeight() * JUCE_LIVE_CONSTANT(0.25);
-    const auto msW = getWidth() * JUCE_LIVE_CONSTANT(0.30);
-    const auto msH = getHeight() * JUCE_LIVE_CONSTANT(0.30);
-    mixSlider.setBounds(msX,msY,msW,msW);
+   
+    irMenu.setBounds(145, 255, 120,25);
 
+    // gain slider
+    gainSlider.setBounds(50,200,80,80);
+
+    // mix slider
+    mixSlider.setBounds(280,200,80,80);
 
     // level meter
-  
+    verticalDiscreteMeterL.setBounds(200, 50, 25, 200);
+    verticalDiscreteMeterR.setBounds(215, 50, 25, 200);
 
-    verticalDiscreteMeterL.setBounds(200, 200, 25, 200);
-    verticalDiscreteMeterR.setBounds(230, 200, 25, 200);
+    // info button
+    infoButton.setBounds(350, 20, 30, 30);
 
+    
  
 
 
@@ -202,4 +240,5 @@ void SacredTrinityVerbAudioProcessorEditor::sliderValueChanged(juce::Slider* sli
   
 
 }
+
 

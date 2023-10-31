@@ -8,6 +8,19 @@
 
 //==============================================================================
 
+// the look and feel class
+class OtherLookAndFeel : public juce::LookAndFeel_V3
+{
+public:
+
+
+};
+
+
+
+
+
+//==============================================================================
 
 class SacredTrinityVerbAudioProcessorEditor  : public juce::AudioProcessorEditor, public juce::Slider::Listener, public juce::Timer
 {
@@ -32,6 +45,9 @@ public:
 
 private:
     SacredTrinityVerbAudioProcessor& audioProcessor;
+    
+    OtherLookAndFeel otherLookandFeel;
+
     juce::ComboBox irMenu;
     
     
@@ -48,6 +64,12 @@ private:
     // for metering
     //Gui::HorizontalMeter horizontalMeterL, horizontalMeterR;
     Gui::VerticalDiscreteMeter verticalDiscreteMeterL, verticalDiscreteMeterR;
+
+    // info window
+    juce::TextButton infoButton;
+    std::unique_ptr<juce::AlertWindow> infoWindow;
+
+  
 
 
 
