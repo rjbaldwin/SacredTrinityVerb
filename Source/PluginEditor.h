@@ -34,7 +34,7 @@ public:
     void resized() override;
 
 
-    void loadIRbinary(const char* resourceName, int dataSizeInBytes, size_t resourceSize);
+    
     void sliderValueChanged(juce::Slider* slider);
 
     using SliderAttachment = juce::AudioProcessorValueTreeState::SliderAttachment;

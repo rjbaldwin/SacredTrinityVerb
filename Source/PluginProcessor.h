@@ -53,8 +53,8 @@ public:
 
     juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
     void parameterChanged(const juce::String& parameterID, float newValue) override;
-
-
+    float getRMSValue(const int channel) const;
+    void loadIRbinary(const char* resourceName, int dataSizeInBytes, size_t resourceSize);
 
 
     juce::File root, savedFile;
@@ -66,7 +66,7 @@ public:
     // for mix
     float mix{ 0.0 };
 
-    float getRMSValue(const int channel) const;
+    
 
 
 private:

@@ -247,7 +247,38 @@ void SacredTrinityVerbAudioProcessor::setStateInformation (const void* data, int
     DBG("XML Content:\n" << xmlState->toString());
   
     //*************************
-    
+    // Extract the value of "IRCHOICE" parameter
+    int irChoice = treeState.getRawParameterValue("IRCHOICE")->load();
+
+    // Call the loadIRbinary function based on the extracted value
+
+
+    switch (irChoice)
+    {
+    case 1:
+        loadIRbinary("main_hall_2m_wav", BinaryData::main_hall_2m_wavSize, BinaryData::main_hall_2m_wavSize);
+        break;
+    case 2:
+        loadIRbinary("main_hall_4m_wav", BinaryData::main_hall_4m_wavSize, BinaryData::main_hall_4m_wavSize);
+        break;
+    case 3:
+        loadIRbinary("main_hall_5m_wav", BinaryData::main_hall_5m_wavSize, BinaryData::main_hall_5m_wavSize);
+        break;
+    case 4:
+        loadIRbinary("main_hall_9m_wav", BinaryData::main_hall_9m_wavSize, BinaryData::main_hall_9m_wavSize);
+        break;
+    case 5:
+        loadIRbinary("small_room_2m_wav", BinaryData::small_room_2m_wavSize, BinaryData::small_room_2m_wavSize);
+        break;
+    case 6:
+        loadIRbinary("balcony_3m_wav", BinaryData::balcony_3m_wavSize, BinaryData::balcony_3m_wavSize);
+        break;
+    case 7:
+        loadIRbinary("balcony_6m_wav", BinaryData::balcony_6m_wavSize, BinaryData::balcony_6m_wavSize);
+        break;
+    default:
+        break;
+    }
     
 
 }
@@ -299,7 +330,16 @@ float SacredTrinityVerbAudioProcessor::getRMSValue(const int channel) const
 
 
 
+// IR Binary loader
 
+void SacredTrinityVerbAudioProcessor::loadIRbinary(const char* resourceName, int dataSizeInBytes, size_t resourceSize)
+{
+    const void* sourceData = BinaryData::getNamedResource(resourceName, dataSizeInBytes);
+
+    irLoader.reset(); // clears the buffer for next ir file
+    irLoader.loadImpulseResponse(sourceData, resourceSize, juce::dsp::Convolution::Stereo::yes, juce::dsp::Convolution::Trim::no, 0, juce::dsp::Convolution::Normalise::no);
+
+}
 
 
 
