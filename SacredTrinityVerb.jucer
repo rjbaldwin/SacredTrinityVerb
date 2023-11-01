@@ -9,8 +9,6 @@
     <GROUP id="{F3B34D15-FD97-216A-9DC1-366E488ABFB9}" name="Source">
       <GROUP id="{1BE300E3-57C3-E7AC-BDAC-A64BF953823A}" name="Images">
         <FILE id="ucayZJ" name="guiBack1.jpg" compile="0" resource="1" file="Source/Images/guiBack1.jpg"/>
-        <FILE id="BoKjR8" name="tempBack2.jpg" compile="0" resource="1" file="Source/Images/tempBack2.jpg"/>
-        <FILE id="oiFAAR" name="tempBack3.jpg" compile="0" resource="1" file="Source/Images/tempBack3.jpg"/>
       </GROUP>
       <GROUP id="{35A938CD-1404-7358-2189-61E7AD53C6E6}" name="Component">
         <FILE id="ljS4WB" name="HorizontalMeter.h" compile="0" resource="0"

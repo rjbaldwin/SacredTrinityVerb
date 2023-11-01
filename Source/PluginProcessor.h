@@ -54,6 +54,9 @@ public:
     juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
     void parameterChanged(const juce::String& parameterID, float newValue) override;
 
+
+
+
     juce::File root, savedFile;
     juce::dsp::Convolution irLoader;
     juce::AudioProcessorValueTreeState treeState;

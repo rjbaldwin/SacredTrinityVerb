@@ -243,7 +243,13 @@ void SacredTrinityVerbAudioProcessor::setStateInformation (const void* data, int
         if (xmlState->hasTagName(treeState.state.getType()))
            treeState.replaceState(juce::ValueTree::fromXml(*xmlState));
 
+    // Debug command to print XML content
+    DBG("XML Content:\n" << xmlState->toString());
   
+    //*************************
+    
+    
+
 }
 
 
@@ -290,6 +296,8 @@ float SacredTrinityVerbAudioProcessor::getRMSValue(const int channel) const
         return rmsLevelRight;
     return 0.f;
 }
+
+
 
 
 

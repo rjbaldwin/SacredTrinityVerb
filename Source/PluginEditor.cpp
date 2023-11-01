@@ -75,6 +75,7 @@ SacredTrinityVerbAudioProcessorEditor::SacredTrinityVerbAudioProcessorEditor(Sac
     irMenu.addItem("Balcony 6m", 7);
 
     irMenuAttachment = std::make_unique<ComboBoxAttachment>(audioProcessor.treeState, "IRCHOICE", irMenu);
+   
 
     // info button
     addAndMakeVisible(infoButton);
@@ -110,7 +111,7 @@ SacredTrinityVerbAudioProcessorEditor::SacredTrinityVerbAudioProcessorEditor(Sac
         {  
             int selectedId = irMenu.getSelectedId();
             
-     
+            DBG("Combo Box Selection Changed"); // Add this line for debugging
             switch (selectedId)
             {
             case 1:
@@ -223,7 +224,7 @@ void SacredTrinityVerbAudioProcessorEditor::loadIRbinary(const char* resourceNam
     const void* sourceData =  BinaryData::getNamedResource(resourceName, dataSizeInBytes);
 
     audioProcessor.irLoader.reset(); // clears the buffer for next ir file
-    audioProcessor.irLoader.loadImpulseResponse(sourceData, resourceSize, juce::dsp::Convolution::Stereo::yes, juce::dsp::Convolution::Trim::no, 0, juce::dsp::Convolution::Normalise::yes);
+    audioProcessor.irLoader.loadImpulseResponse(sourceData, resourceSize, juce::dsp::Convolution::Stereo::yes, juce::dsp::Convolution::Trim::no, 0, juce::dsp::Convolution::Normalise::no);
 
 }
 
