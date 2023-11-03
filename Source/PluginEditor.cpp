@@ -17,10 +17,10 @@ SacredTrinityVerbAudioProcessorEditor::SacredTrinityVerbAudioProcessorEditor(Sac
     gainSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     gainSlider.setLookAndFeel(&otherLookandFeel);
     gainSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 200, 25);
+    gainSlider.setValue(-10.0f);
     gainSlider.setTextValueSuffix(" dB");
     gainSlider.setRange(-48.0f, 0.0f);
     gainSlider.setNumDecimalPlacesToDisplay(1);
-    gainSlider.setValue(-10.0f);
     gainSlider.addListener(this);
     gainSliderAttachment = std::make_unique<SliderAttachment>(audioProcessor.treeState, "GAIN", gainSlider);
 

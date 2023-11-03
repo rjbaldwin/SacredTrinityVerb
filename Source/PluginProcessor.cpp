@@ -297,7 +297,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout SacredTrinityVerbAudioProces
 
     std::vector<std::unique_ptr<juce::RangedAudioParameter>> params;
 
-    auto gainParam = std::make_unique<juce::AudioParameterFloat>("GAIN", "Gain", -48.0f, 0.0f, 0.0f);
+    auto gainParam = std::make_unique<juce::AudioParameterFloat>("GAIN", "Gain", -48.0f, 0.0f, -10.0f);
     params.push_back(std::move(gainParam));
 
     auto mixParam = std::make_unique<juce::AudioParameterFloat>("MIX", "Mix", 0.f, 100.0f, 1.0f);
