@@ -47,6 +47,7 @@ private:
     OtherLookAndFeel otherLookandFeel;
 
     juce::ComboBox irMenu;
+    juce::Label roomLabel;
     
     
     juce::Slider gainSlider;

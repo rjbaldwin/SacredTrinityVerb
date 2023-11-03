@@ -22,20 +22,21 @@ SacredTrinityVerbAudioProcessorEditor::SacredTrinityVerbAudioProcessorEditor(Sac
     gainSlider.setNumDecimalPlacesToDisplay(1);
     gainSlider.setValue(-10.0f);
     gainSlider.addListener(this);
-    addAndMakeVisible(gainLabel);
+    gainSliderAttachment = std::make_unique<SliderAttachment>(audioProcessor.treeState, "GAIN", gainSlider);
 
+    // gain label
+    addAndMakeVisible(gainLabel);
     gainLabel.setLookAndFeel(&otherLookandFeel);
     gainLabel.attachToComponent(&gainSlider, false);
     gainLabel.setText("Gain", juce::dontSendNotification);
-    gainLabel.setColour(juce::Label::textColourId, juce::Colours::white);
+    gainLabel.setColour(juce::Label::textColourId, juce::Colours::black);
     juce::Font gainfont = gainLabel.getFont();
     gainfont.setHeight(20.0f);
     gainfont.setBold(true);
     gainLabel.setFont(gainfont);
- 
     gainLabel.setJustificationType(juce::Justification::centred);
 
-    gainSliderAttachment = std::make_unique<SliderAttachment>(audioProcessor.treeState, "GAIN", gainSlider);
+    
 
     // mix slider
     addAndMakeVisible(mixSlider);
@@ -47,34 +48,44 @@ SacredTrinityVerbAudioProcessorEditor::SacredTrinityVerbAudioProcessorEditor(Sac
     mixSlider.setNumDecimalPlacesToDisplay(0);
     mixSlider.setValue(0.0f);
     mixSlider.addListener(this);
+    mixSliderAttachment = std::make_unique<SliderAttachment>(audioProcessor.treeState, "MIX", mixSlider);
 
-
+    // mix label
     addAndMakeVisible(mixLabel);
     mixLabel.setLookAndFeel(&otherLookandFeel);
     mixLabel.attachToComponent(&mixSlider, false);
     mixLabel.setText("Mix", juce::dontSendNotification);
-    mixLabel.setColour(juce::Label::textColourId, juce::Colours::white);
+    mixLabel.setColour(juce::Label::textColourId, juce::Colours::black);
     juce::Font mixfont = mixLabel.getFont();
     mixfont.setHeight(20.0f);
     mixfont.setBold(true);
     mixLabel.setFont(mixfont);
     mixLabel.setJustificationType(juce::Justification::centred);
-    
-
-    mixSliderAttachment = std::make_unique<SliderAttachment>(audioProcessor.treeState, "MIX", mixSlider);
-    
-
+   
+    // ir menu combobox
     addAndMakeVisible(irMenu);
-    //irMenu.setLookAndFeel(&otherLookandFeel);
-    irMenu.addItem("Main Hall 2m",1);
-    irMenu.addItem("Main Hall 4m", 2);
-    irMenu.addItem("Main Hall 5m", 3);
-    irMenu.addItem("Main Hall 9m", 4);
-    irMenu.addItem("Small Room 2m", 5);
-    irMenu.addItem("Balcony 3m", 6);
-    irMenu.addItem("Balcony 6m", 7);
-
+    irMenu.addItem("No Impulse Loaded!",1);
+    irMenu.addItem("Main Hall 2m",2);
+    irMenu.addItem("Main Hall 4m", 3);
+    irMenu.addItem("Main Hall 5m", 4);
+    irMenu.addItem("Main Hall 9m", 5);
+    irMenu.addItem("Small Room 2m", 6);
+    irMenu.addItem("Balcony 3m", 7);
+    irMenu.addItem("Balcony 6m", 8);
+    irMenu.setSelectedId(0);
     irMenuAttachment = std::make_unique<ComboBoxAttachment>(audioProcessor.treeState, "IRCHOICE", irMenu);
+
+    // irLoader label
+    addAndMakeVisible(roomLabel);
+    roomLabel.setLookAndFeel(&otherLookandFeel);
+    roomLabel.attachToComponent(&irMenu, false);
+    roomLabel.setText("Room Selection", juce::dontSendNotification);
+    roomLabel.setColour(juce::Label::textColourId, juce::Colours::black);
+    juce::Font roomlabelfont = roomLabel.getFont();
+    roomlabelfont.setHeight(20.0f);
+    roomlabelfont.setBold(true);
+    roomLabel.setFont(roomlabelfont);
+    roomLabel.setJustificationType(juce::Justification::centred);
    
 
     // info button
@@ -116,24 +127,27 @@ SacredTrinityVerbAudioProcessorEditor::SacredTrinityVerbAudioProcessorEditor(Sac
             switch (selectedId)
             {
             case 1:
-                audioProcessor.loadIRbinary("main_hall_2m_wav", BinaryData::main_hall_2m_wavSize, BinaryData::main_hall_2m_wavSize);
+                audioProcessor.irLoader.reset();
                 break;
             case 2:
-                audioProcessor.loadIRbinary("main_hall_4m_wav", BinaryData::main_hall_4m_wavSize, BinaryData::main_hall_4m_wavSize);
+                audioProcessor.loadIRbinary("main_hall_2m_wav", BinaryData::main_hall_2m_wavSize, BinaryData::main_hall_2m_wavSize);
                 break;
             case 3:
-                audioProcessor.loadIRbinary("main_hall_5m_wav", BinaryData::main_hall_5m_wavSize, BinaryData::main_hall_5m_wavSize);
+                audioProcessor.loadIRbinary("main_hall_4m_wav", BinaryData::main_hall_4m_wavSize, BinaryData::main_hall_4m_wavSize);
                 break;
             case 4:
-                audioProcessor.loadIRbinary("main_hall_9m_wav", BinaryData::main_hall_9m_wavSize, BinaryData::main_hall_9m_wavSize);
+                audioProcessor.loadIRbinary("main_hall_5m_wav", BinaryData::main_hall_5m_wavSize, BinaryData::main_hall_5m_wavSize);
                 break;
             case 5:
-                audioProcessor.loadIRbinary("small_room_2m_wav", BinaryData::small_room_2m_wavSize, BinaryData::small_room_2m_wavSize);
+                audioProcessor.loadIRbinary("main_hall_9m_wav", BinaryData::main_hall_9m_wavSize, BinaryData::main_hall_9m_wavSize);
                 break;
             case 6:
-                audioProcessor.loadIRbinary("balcony_3m_wav", BinaryData::balcony_3m_wavSize, BinaryData::balcony_3m_wavSize);
+                audioProcessor.loadIRbinary("small_room_2m_wav", BinaryData::small_room_2m_wavSize, BinaryData::small_room_2m_wavSize);
                 break;
             case 7:
+                audioProcessor.loadIRbinary("balcony_3m_wav", BinaryData::balcony_3m_wavSize, BinaryData::balcony_3m_wavSize);
+                break;
+            case 8:
                 audioProcessor.loadIRbinary("balcony_6m_wav", BinaryData::balcony_6m_wavSize, BinaryData::balcony_6m_wavSize);
                 break;
             default:
@@ -145,20 +159,16 @@ SacredTrinityVerbAudioProcessorEditor::SacredTrinityVerbAudioProcessorEditor(Sac
         };
     
 
-
-
-
-    // level meter
-    
+    // level meter  
     addAndMakeVisible(verticalDiscreteMeterL);
     addAndMakeVisible(verticalDiscreteMeterR);
     startTimerHz(24);
 
+    //==============================================================================
+
+
     setSize (410, 410);
 }
-
-
-
 
 
 SacredTrinityVerbAudioProcessorEditor::~SacredTrinityVerbAudioProcessorEditor()
@@ -191,11 +201,7 @@ void SacredTrinityVerbAudioProcessorEditor::paint(juce::Graphics& g)
 void SacredTrinityVerbAudioProcessorEditor::resized()
 {
    
-
     // combo box
-    
-   
-   
     irMenu.setBounds(145, 300, 120,25);
 
     // gain slider
@@ -211,10 +217,6 @@ void SacredTrinityVerbAudioProcessorEditor::resized()
     // info button
     infoButton.setBounds(370, 350, 30, 30);
 
-    
- 
-
-
 }
 
 
@@ -228,8 +230,6 @@ void SacredTrinityVerbAudioProcessorEditor::sliderValueChanged(juce::Slider* sli
         audioProcessor.rawVolume = pow(10, gainSlider.getValue() / 20);
         DBG("Raw Volume: " << audioProcessor.rawVolume);
     }
-
-  
 
 }
 

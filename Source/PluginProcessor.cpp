@@ -260,24 +260,27 @@ void SacredTrinityVerbAudioProcessor::setStateInformation (const void* data, int
     switch (adjustedId)
     {
     case 1:
-        loadIRbinary("main_hall_2m_wav", BinaryData::main_hall_2m_wavSize, BinaryData::main_hall_2m_wavSize);
+        irLoader.reset();
         break;
     case 2:
-        loadIRbinary("main_hall_4m_wav", BinaryData::main_hall_4m_wavSize, BinaryData::main_hall_4m_wavSize);
+        loadIRbinary("main_hall_2m_wav", BinaryData::main_hall_2m_wavSize, BinaryData::main_hall_2m_wavSize);
         break;
     case 3:
-        loadIRbinary("main_hall_5m_wav", BinaryData::main_hall_5m_wavSize, BinaryData::main_hall_5m_wavSize);
+        loadIRbinary("main_hall_4m_wav", BinaryData::main_hall_4m_wavSize, BinaryData::main_hall_4m_wavSize);
         break;
     case 4:
-        loadIRbinary("main_hall_9m_wav", BinaryData::main_hall_9m_wavSize, BinaryData::main_hall_9m_wavSize);
+        loadIRbinary("main_hall_5m_wav", BinaryData::main_hall_5m_wavSize, BinaryData::main_hall_5m_wavSize);
         break;
     case 5:
-        loadIRbinary("small_room_2m_wav", BinaryData::small_room_2m_wavSize, BinaryData::small_room_2m_wavSize);
+        loadIRbinary("main_hall_9m_wav", BinaryData::main_hall_9m_wavSize, BinaryData::main_hall_9m_wavSize);
         break;
     case 6:
-        loadIRbinary("balcony_3m_wav", BinaryData::balcony_3m_wavSize, BinaryData::balcony_3m_wavSize);
+        loadIRbinary("small_room_2m_wav", BinaryData::small_room_2m_wavSize, BinaryData::small_room_2m_wavSize);
         break;
     case 7:
+        loadIRbinary("balcony_3m_wav", BinaryData::balcony_3m_wavSize, BinaryData::balcony_3m_wavSize);
+        break;
+    case 8:
         loadIRbinary("balcony_6m_wav", BinaryData::balcony_6m_wavSize, BinaryData::balcony_6m_wavSize);
         break;
     default:
@@ -300,7 +303,8 @@ juce::AudioProcessorValueTreeState::ParameterLayout SacredTrinityVerbAudioProces
     auto mixParam = std::make_unique<juce::AudioParameterFloat>("MIX", "Mix", 0.f, 100.0f, 1.0f);
     params.push_back(std::move(mixParam));
 
-    auto comboParams = std::make_unique<juce::AudioParameterChoice>("IRCHOICE", "IRchoice", juce::StringArray("Main Hall 2m", 
+    auto comboParams = std::make_unique<juce::AudioParameterChoice>("IRCHOICE", "IRchoice", juce::StringArray("No Impulse Loaded!", 
+                                                                                                              "Main Hall 2m", 
                                                                                                               "Main Hall 4m", 
                                                                                                               "Main Hall 5m", 
                                                                                                               "Main Hall 9m", 
