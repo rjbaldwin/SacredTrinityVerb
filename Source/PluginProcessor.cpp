@@ -300,7 +300,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout SacredTrinityVerbAudioProces
     auto gainParam = std::make_unique<juce::AudioParameterFloat>("GAIN", "Gain", -48.0f, 0.0f, -10.0f);
     params.push_back(std::move(gainParam));
 
-    auto mixParam = std::make_unique<juce::AudioParameterFloat>("MIX", "Mix", 0.f, 100.0f, 1.0f);
+    auto mixParam = std::make_unique<juce::AudioParameterFloat>("MIX", "Mix", 0.f, 100.0f, 20.0f);
     params.push_back(std::move(mixParam));
 
     auto comboParams = std::make_unique<juce::AudioParameterChoice>("IRCHOICE", "IRchoice", juce::StringArray("No Impulse Loaded!", 
