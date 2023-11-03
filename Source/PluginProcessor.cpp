@@ -4,6 +4,7 @@
 // from Sacred Trinity Church in Salford, Greater Manchester.  There are 3 main rooms that we produce impulse responses of.
 // Thanks to Rev Andy Salmon for allowing me to do this for the past 10 years in a row!
 // This is my third piece of proper software ever! 
+// 08/11/2023 think i have sorted all the bugs out! 
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
@@ -252,8 +253,11 @@ void SacredTrinityVerbAudioProcessor::setStateInformation (const void* data, int
 
     // Call the loadIRbinary function based on the extracted value
 
+    // Adjust the ComboBox ID to match ValueTree state index
+    int adjustedId = irChoice + 1;
 
-    switch (irChoice)
+
+    switch (adjustedId)
     {
     case 1:
         loadIRbinary("main_hall_2m_wav", BinaryData::main_hall_2m_wavSize, BinaryData::main_hall_2m_wavSize);

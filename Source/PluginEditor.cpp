@@ -110,6 +110,9 @@ SacredTrinityVerbAudioProcessorEditor::SacredTrinityVerbAudioProcessorEditor(Sac
            
             DBG("Combo Box Selection Changed"); // Add this line for debugging
             DBG("ID: " << selectedId);
+
+     
+
             switch (selectedId)
             {
             case 1:
@@ -137,7 +140,7 @@ SacredTrinityVerbAudioProcessorEditor::SacredTrinityVerbAudioProcessorEditor(Sac
                 break;
             }
 
-            
+           
 
         };
     
